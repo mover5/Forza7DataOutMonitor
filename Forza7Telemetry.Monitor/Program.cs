@@ -30,38 +30,4 @@ namespace Forza7Telemetry.Monitor
             listener.StartListener();
         }
     }
-
-    class ForzaListener
-    {
-        public static void StartListener()
-        {
-            bool done = false;
-
-            UdpClient listener = new UdpClient(11000);
-            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, 11000);
-
-            try
-            {
-                while (!done)
-                {
-                    byte[] bytes = listener.Receive(ref groupEP);
-                    var raceStarted = BitConverter.ToInt32(bytes, 0);
-                    if (raceStarted == 1)
-                    {
-                        var rpm = BitConverter.ToSingle(bytes, 16);
-                        Console.WriteLine("RPM: {0}", rpm);
-                    }
-                }
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-            finally
-            {
-                listener.Close();
-            }
-        }
-    }
 }
